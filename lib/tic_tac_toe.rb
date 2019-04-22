@@ -14,67 +14,66 @@ class TicTacToe
   user_input.to_i - 1
   
 end
-  
-end
-  
 
-def move(board, index, current_player)
-  board[index] = current_player
+def move(index, current_player = "X")
+  @board[index] = current_player
 end
-
-def position_taken?(board, location)
-  board[location] != " " && board[location] != ""
+def position_taken?(location)
+  @board[location] != " " && @board[location] != ""
 end
 
-def valid_move?(board, index)
-  index.between?(0,8) && !position_taken?(board, index)
+def valid_move?(index)
+  index.between?(0,8) && !position_taken?( index)
 end
 
-def turn(board)
+def turn
   puts "Please enter 1-9:"
   input = gets.strip
   index = input_to_index(input)
-  if valid_move?(board, index)
-    move(board, index, current_player(board))
-    display_board(board)
+  if valid_move?(index)
+    move(index, current_player(board))
+    display_board
   else
-    turn(board)
+    turn
   end
 end
 
-def turn_count(board)
-  board.reduce(0) {|count, place| count + (place == "X" || place == "O" ? 1 : 0)}
+def turn_count
+  @board.reduce(0) {|count, place| count + (place == "X" || place == "O" ? 1 : 0)}
 end
 
-def current_player(board)
-  turn_count(board) % 2 == 0 ? "X" : "O"
+def current_player
+  turn_count % 2 == 0 ? "X" : "O"
 end
 
-def won?(board)
+def won?
 WIN_COMBINATIONS.each do |comb|
-  return comb if board[comb[0]] == board[comb[1]] && board[comb[0]] == board[comb[2]] && (board[comb[0]] == "X" || board[comb[0]] == "O")
+  return comb if @board[comb[0]] == @board[comb[1]] && @board[comb[0]] == @board[comb[2]] && (@board[comb[0]] == "X" || @board[comb[0]] == "O")
   end
   return false
 end
-
-def full?(board)
-  board.all? {|place| place == "X" || place == "O"}
+  
+def full?
+  @board.all? {|place| place == "X" || place == "O"}
 end
 
-def draw?(board)
-  !won?(board) if full?(board)
+def draw?
+  !won? if full?
 end
 
-def over?(board)
-  won?(board) || draw?(board)
+def over?
+  won? || draw?
 end
 
-def winner(board)
-  won?(board) ? board[won?(board)[0]] : nil
+def winner
+  won? ? board[won?[0]] : nil
 end
 
-def play(board)
-  turn(board) until over?(board)
-  puts "Congratulations #{winner(board)}!" if winner(board)
-  puts "Cat's Game!" if draw?(board)
+def play
+  turn until over?
+  puts "Congratulations #{winner}!" if winner
+  puts "Cat's Game!" if draw?
 end
+  
+end
+  
